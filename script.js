@@ -3,10 +3,26 @@ const quoteText = document.getElementById("quote");
 const quoteAuthor = document.getElementById("author");
 const twitterBtn = document.getElementById("twitter");
 const newQuoteBtn = document.getElementById("new-quote");
+const loader = document.getElementById("loader");
+
+//Show loader
+const loading = () => {
+    loader.hidden = false;
+    quoteContainer.hidden = true;
+};
+
+//hide loading
+const complete = () => {
+    if (loader.hidden === false) {
+        loader.hidden = true;
+        quoteContainer.hidden = false;
+    }
+};
 
 // Get quotes from API
 async function getQuote() {
     //proxy to prevent CORS error
+    loading();
     const proxyUrl = "https://api.allorigins.win/get?url=";
     const apiUrl = "http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json";
     try {
@@ -30,6 +46,9 @@ async function getQuote() {
             quoteText.classList.remove("long-quote");
         }
         quoteText.innerText = dataJSON.quoteText;
+
+        //stop loader
+        complete();
     } catch (e) {
         getQuote();
         console.log("noquote", e);
@@ -39,7 +58,7 @@ async function getQuote() {
 const tweetQuote = () => {
     const quote = dataJSON.quoteText;
     const author = dataJSON.quoteAuthor;
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${quote} - ${author}`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text="${quote}" - ${author}`;
     window.open(twitterUrl, "_blank");
 };
 
@@ -49,3 +68,4 @@ twitterBtn.addEventListener("click", tweetQuote);
 
 // Onload
 getQuote();
+loading();
