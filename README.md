@@ -5,4 +5,5 @@ Hello, this is my first project in attempt to finish 20 JavaScript projects in a
 ## Building Process
 I am using forismatic API to grab the quotes, then append it to a proxy AllOrigins to prevent CORS Error(due to forismatic being public API).
 
-##Snapshot
+## Snapshot
+./snapshot.png
