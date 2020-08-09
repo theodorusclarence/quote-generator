@@ -25,7 +25,7 @@ body {
     content: "\f10d";
     font-weight: 900;
     font-family: "Font Awesome 5 Free";
-    font-size: 3rem;
+    font-size: 2.5rem;
 
     margin-right: 0.25em;
 }
@@ -72,6 +72,7 @@ button {
     background: #333;
     color: white;
     box-shadow: 0 0.3rem rgba(121, 121, 121, 0.65);
+    margin-right: 10px;
 
     &:hover {
         filter: brightness(110%);
@@ -86,9 +87,15 @@ button {
 .twitter-btn {
     font-size: 1.5rem;
 
-    &:hover {
+    &:hover,
+    &:focus {
         color: #38a1f3;
     }
+}
+
+.new-quote:hover,
+.new-quote:focus {
+    color: #07fcdf;
 }
 
 @media (min-width: 600px) {
