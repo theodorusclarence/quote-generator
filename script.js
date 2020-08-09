@@ -1,28 +1,33 @@
-const quoteContainer = document.getElementById("quote-container");
 const quoteText = document.getElementById("quote");
+const quoteContainer = document.getElementById("quote-container");
 const quoteAuthor = document.getElementById("author");
 const twitterBtn = document.getElementById("twitter");
 const newQuoteBtn = document.getElementById("new-quote");
 const loader = document.getElementById("loader");
 
-//Show loader
-const loading = () => {
+const showLoadingSpinner = () => {
     loader.hidden = false;
     quoteContainer.hidden = true;
 };
 
-//hide loading
-const complete = () => {
+const removeLoadingSpinner = () => {
     if (loader.hidden === false) {
         loader.hidden = true;
         quoteContainer.hidden = false;
     }
 };
 
+const errorScreen = () => {
+    quoteText.innerText = "Error, please try again";
+    quoteAuthor.hidden = true;
+};
+
+reloadCounter = 0;
+
 // Get quotes from API
 async function getQuote() {
     //proxy to prevent CORS error
-    loading();
+    showLoadingSpinner();
     const proxyUrl = "https://api.allorigins.win/get?url=";
     const apiUrl = "http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json";
     try {
@@ -47,11 +52,14 @@ async function getQuote() {
         }
         quoteText.innerText = dataJSON.quoteText;
 
-        //stop loader
-        complete();
+        removeLoadingSpinner();
     } catch (e) {
-        getQuote();
-        console.log("noquote", e);
+        console.log(e);
+        if (reloadCounter++ < 10) {
+            return getQuote();
+        } else {
+            errorScreen();
+        }
     }
 }
 
@@ -63,9 +71,11 @@ const tweetQuote = () => {
 };
 
 //Event listener
-newQuoteBtn.addEventListener("click", getQuote);
+newQuoteBtn.addEventListener("click", () => {
+    getQuote();
+    reloadCounter = 0;
+});
 twitterBtn.addEventListener("click", tweetQuote);
 
-// Onload
+//onLoad
 getQuote();
-loading();
